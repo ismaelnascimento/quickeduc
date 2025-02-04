@@ -11,5 +11,6 @@ protocol ActivityProtocol {
     var note: Note? { get set }
     var local: String? { get set }
     var type: String { get set } // TypeActivity
-    func show()   
+    var date: Date { get set }
+    func show()
 }

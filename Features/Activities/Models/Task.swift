@@ -13,7 +13,7 @@ class Task: ActivityProtocol {
     var isDone: Bool
     var type: String
     
-    var dueDate: Date
+    var date: Date
     var team: String?
     // Calendar.current.date(byAdding: .day, value: 7, to: Date())
     
@@ -28,11 +28,11 @@ class Task: ActivityProtocol {
         print("isDone: \(isDone)")
         print("type: \(type)")
         
-        print("data: \(dueDate.formatted())")
+        print("data: \(date.formatted())")
         print("team: \(team ?? "vazio")")
     }
     
-    init(title: String, describe: String? = nil, subject: Subject? = nil, teacher: String? = nil, note: Note? = nil, createAt: Date, local: String? = nil, isDone: Bool, type: String, dueDate: Date, team: String? = nil) {
+    init(title: String, describe: String? = nil, subject: Subject? = nil, teacher: String? = nil, note: Note? = nil, createAt: Date, local: String? = nil, isDone: Bool, type: String, date: Date, team: String? = nil) {
         self.title = title
         self.describe = describe
         self.subject = subject
@@ -42,7 +42,7 @@ class Task: ActivityProtocol {
         self.local = local
         self.isDone = isDone
         self.type = type
-        self.dueDate = dueDate
+        self.date = date
         self.team = team
     }
 }

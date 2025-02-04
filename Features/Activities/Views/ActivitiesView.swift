@@ -40,7 +40,7 @@ struct ActivitiesView: View {
                             Text($0)
                         }
                     }
-                    .pickerStyle(.segmented)
+                    .pickerStyle(.palette)
                     .padding(.top, 10)
                     
                     
