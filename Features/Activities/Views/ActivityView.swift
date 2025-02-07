@@ -16,21 +16,23 @@ struct ActivityView: View {
     
     var body: some View {
         HStack{
-            Image(systemName: IconsActivity.IconActivityByName(name: activity.type)).resizable().scaledToFit().frame(width: 44, height: 44).foregroundColor(.colorGreen)
+            Image(systemName: IconsActivity.IconActivityByName(name: activity.type)).resizable().scaledToFit().frame(width: 44, height: 44).foregroundColor(activity.subject!.colorComponent.color)
                 
             HStack {
                 VStack(alignment: .leading){
                     Text(activity.title).font(.system(size: 18)).bold()
                     HStack{
-                        Image(systemName: "calendar").resizable().scaledToFit().frame(width: 16, height: 16).foregroundColor(.colorGreen)
+                        Image(systemName: "calendar").resizable().scaledToFit().frame(width: 16, height: 16).foregroundColor(Color.colorTextGray)
                         
-                        Text(activity.date.formatted()).font(.system(size: 14))
+                        Text(activity.date.formatted().prefix(5) + ", " + activity.date.formatted().suffix(5)).font(.system(size: 14))
+                            .foregroundColor(Color.colorTextGray)
                         
                     }
                     HStack{
-                        Image(systemName: "clock").resizable().scaledToFit().frame(width: 16, height: 16).foregroundColor(.colorGreen)
+                        Image(systemName: "clock").resizable().scaledToFit().frame(width: 16, height: 16).foregroundColor(.colorTextGray)
                         
-                        Text(activity.date.formatted()).font(.system(size: 14))
+                        Text(activity.date.formatted().prefix(5) + ", " + activity.date.formatted().suffix(5)).font(.system(size: 14))
+                            .foregroundColor(Color.colorTextGray)
                     }
                 }.padding(.leading)
                 
@@ -42,6 +44,10 @@ struct ActivityView: View {
                     Spacer()
                     
                     Text(activity.subject!.title)
+                        .foregroundColor(.colorGreen)
+                        .background(Color.colorGreen.tertiary)
+                        
+                        .cornerRadius(Sizes.radius)
                        
                 }
             }
@@ -57,10 +63,10 @@ struct ActivityView: View {
 
 #Preview {
     var activities: [ActivityProtocol] = [
-        Test(title: "Prova", subject: Subject(title: "Matemática"), createAt: Date.now, isDone: true, type: TypeActivity.test, date: Date.now),
-        Presentation(title: "Apresentação", subject: Subject(title: "Matemática"), createAt: Date.now, isDone: true, type: TypeActivity.presentation, date: Date.now),
-        Presentation(title: "Tarefa", subject: Subject(title: "Matemática"), createAt: Date.now, isDone: true, type: TypeActivity.task, date: Date.now),
-        Presentation(title: "Evento", subject: Subject(title: "Apple"), createAt: Date.now, isDone: true, type: TypeActivity.event, date: Date.now),
+        Test(title: "Prova", subject: Subject(title: "Matemática", color: Color.blue), createAt: Date.now, isDone: true, type: TypeActivity.test, date: Date.now),
+        Presentation(title: "Apresentação", subject: Subject(title: "Geografia", color: Color.green), createAt: Date.now, isDone: true, type: TypeActivity.presentation, date: Date.now),
+        Presentation(title: "Tarefa", subject: Subject(title: "Português", color: Color.yellow), createAt: Date.now, isDone: true, type: TypeActivity.task, date: Date.now),
+        Presentation(title: "Evento", subject: Subject(title: "Apple", color: Color.red), createAt: Date.now, isDone: true, type: TypeActivity.event, date: Date.now),
     ]
     VStack {
         ActivityView(activities[0])
