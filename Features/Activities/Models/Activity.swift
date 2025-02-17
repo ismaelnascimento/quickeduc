@@ -1,6 +1,8 @@
 import Foundation
 import SwiftData
 
+// As was in initial version of app
+
 @Model
 class Activity {
     var title: String

@@ -7,61 +7,47 @@
 
 import SwiftUI
 
-struct NoteView: View {
-    let note: Note
+struct ClassView: View {
+    let classItem: Class
     
-    init(_ note: Note) {
-       self.note = note
+    init(_ classItem: Class) {
+       self.classItem = classItem
         
     }
 
     var body: some View {
         HStack{
-            VStack(alignment: .leading){
-                Text(note.title)
-                    .padding(.top, 10)
-                    .padding(.leading, 10)
-                    .font(.system(size: 25))
+            Image(systemName: "circle").resizable().scaledToFit().frame(width: 28, height: 28).foregroundColor(Color.colorGreen)
+                
+            Text(classItem.name)
+                    .padding(.leading, 4)
+                    .font(.system(size: 22))
                     .fontWeight(Font.Weight.semibold)
-                Text(note.note)
-                    .padding(.horizontal, 10)
-                    .padding(.bottom, 10)
-                    .lineLimit(2)
-                    .foregroundStyle(Color.colorTextGray)
-                    
-                    
-            }
             
-            VStack(alignment: .trailing) {
-                Text(note.createAt.formatted(date: Date.FormatStyle.DateStyle.abbreviated, time: Date.FormatStyle.TimeStyle.omitted))
-                    .font(.system(size: 14))
-                    .padding(Sizes.padding)
-                    .foregroundColor(.colorTextGray)
-                
-                Spacer()
-                Text(note.subject.title)
-                
-                    .font(.system(size: 14))
-                    .padding(.horizontal, 7)
-                    
-                    .foregroundColor(note.subject.colorComponent.color)
-                    .background(note.subject.colorComponent.color.quaternary)
-                    .cornerRadius(Sizes.radius)
-                    .padding(Sizes.padding)
-                   
-            }
+            
+            Spacer()
+            
+            Image(systemName: "book.closed").resizable().scaledToFit().frame(width: 24, height: 24).foregroundColor(Color.colorGreen)
         }
-        .frame(width: 350, height: 100)
-        .background(note.subject.colorComponent.color.quaternary)
+        .frame(height: 90)
+        .padding(.horizontal, Sizes.padding)
+        .background(Color.colorForeground)
         .cornerRadius(Sizes.radius)
     }
 }
 
 #Preview {
-    var notes: [Note] = [
-        Note(title: "Sobre biologia", note: "Essa é uma revisão para a prova de biologia. Essa é uma revisão para a prova de biologia.", subject: Subject(title: "biologia", color: .green), createAt: Date.now)
+    var subjects = [
+        Subject(title: "Matemática", color: Color.indigo),
+        Subject(title: "Geografia", color: Color.pink),
+        Subject(title: "Português", color: Color.blue)
+    ]
+    var classes: [Class] = [
+        Class(name: "P4 Informática", subjects: subjects, createAt: Date.now),
+        Class(name: "P5 Informática", subjects: subjects, createAt: Date.now)
     ]
     VStack {
-        NoteView(notes[0])
+        ClassView(classes[0])
+        ClassView(classes[1])
     }
 }

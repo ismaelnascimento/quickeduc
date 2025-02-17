@@ -1,9 +1,8 @@
 import Foundation
 import SwiftData
 
-struct TypeActivity {
-    static let task = "Task"
-    static let test = "Test"
-    static let presentation = "Presentation"
-    static let event = "Event"
+struct StatusActivity {
+    static let todo = "A fazer"
+    static let doing = "Em andamento"
+    static let done = "Concluído"
 }

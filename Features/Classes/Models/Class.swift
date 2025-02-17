@@ -2,16 +2,14 @@ import Foundation
 import SwiftData
 
 @Model
-class Note {
-    var title: String
-    var note: String
-    var subject: Subject
+class Class {
+    var name: String
+    var subjects: [Subject]
     var createAt: Date
     
-    init(title: String, note: String, subject: Subject, createAt: Date) {
-        self.title = title
-        self.note = note
-        self.subject = subject
+    init(name: String, subjects: [Subject], createAt: Date) {
+        self.name = name
+        self.subjects = subjects
         self.createAt = createAt
     }
 }

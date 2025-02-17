@@ -2,34 +2,29 @@ import SwiftUI
 import SwiftData
 
 struct MainView: View {
-    @State var selection: Int = 2
     
     init() {
         UITabBar.appearance().backgroundColor = UIColor(Color.colorGreenPastel)
     }
     
     var body: some View {
-        TabView(selection: $selection) {
-            ProfileView()
-                
-                        .tabItem {
-                            Label("Perfil", systemImage: "person")
-                        }.tag(1)
+        TabView() {
             
             ActivitiesView()
                         .tabItem {
                             Label("Atividades", systemImage: "calendar")
-                        }.tag(2)
+                        }
 
 
-            NotesView()
+            ClassesView()
                         .tabItem {
-                            Label("Anotações", systemImage: "square.and.pencil")
-                        }.tag(3)
+                            Label("Turmas", systemImage: "person.3")
+                        }
                         
-        }.accentColor(Color.colorGreen).onAppear {
-            selection = 2
-        }
+        }.accentColor(Color.colorGreen)
+            .onAppear() {
+                UITabBar.appearance().backgroundColor = UIColor(Color.colorGreenPastel)
+            }
     }
 }
 

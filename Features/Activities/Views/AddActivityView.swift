@@ -1,75 +1,71 @@
 import SwiftUI
 import SwiftData
 
-struct ActivitiesView: View {
-    var groups = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"]
-    @State var group: String = "Seg"
+struct AddActivityView: View {
+    @Binding var isShowingSheet: Bool
+    @State var title: String = ""
+    @State var local: String = ""
+    @State var note: String = ""
     
-    init() {
-        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(Color.colorGreenPastel)
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(Color.colorText)], for: .selected)
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(Color.colorTextGray)], for: .normal)
-    }
+    @State var subjectSelected: Int = 0
+    var subjects: [String] = ["Português", "Geografia", "Ciências"]
     
-    var activities: [ActivityProtocol] = [
-        Test(title: "Prova", subject: Subject(title: "Matemática", color: Color.indigo), createAt: Date.now, status: StatusActivity.todo, type: TypeActivity.test, date: Date.now),
-        Event(title: "Evento", subject: Subject(title: "Apple", color: Color.green), createAt: Date.now, local: "Planalto Caucaia", status: StatusActivity.done, type: TypeActivity.event, date: Date.now),
-        Presentation(title: "Apresentação", subject: Subject(title: "Geografia", color: Color.pink), createAt: Date.now, status: StatusActivity.done, type: TypeActivity.presentation, date: Date.now),
-        Task(title: "Tarefa", subject: Subject(title: "Português", color: Color.blue), createAt: Date.now, status: StatusActivity.doing, type: TypeActivity.task, date: Date.now),
-    ]
+    @State var typeActivitySelected: Int = 0
+    var activityTypeList: [String] = [TypeActivity.event, TypeActivity.presentation, TypeActivity.task, TypeActivity.test]
+    
+    @State var statusSelected: Int = 0
+    var statusList: [String] = [StatusActivity.todo, StatusActivity.doing, StatusActivity.done]
+    
+    @State var date: Date = Date.now
     
     var body: some View {
         NavigationStack {
-            VStack {
-                VStack {
-                    // Button add
-                    HStack(alignment: .center) {
-                        Text("Olá, o que vamos \nestudar hoje? ")
-                            .fontWeight(.semibold)
-                            .font(.system(size: 28))
-                        .foregroundColor(.colorText)
-                        .frame(height: 68, alignment: .topLeading)
-                      Spacer()
-                        HStack(alignment: .center) {
-                            Image(systemName: "plus").resizable().frame(width: 20, height: 20).foregroundColor(.colorCyan)
-                        }
-                        .padding(7)
-                        .frame(width: 58, height: 58, alignment: .center)
-                        .background(Color.colorGreenLight)
-                        .cornerRadius(100)
-                    }
-                    .padding(Sizes.padding)
-                    .frame(height: 99, alignment: .bottom)
-                    .background(Color.colorGreenPastel)
-                    .cornerRadius(Sizes.radius)
-                    
-                    // Filter day week
-                    Picker("Pick A Group", selection: $group) {
-                        ForEach(groups, id: \.self) {
-                            Text($0)
-                        }
-                    }
-                    .pickerStyle(.palette)
-                    .padding(.top, 10)
-                    
-                    // Activities list
-                    
-                    VStack {
-                        ActivityView(activities[0])
-                        ActivityView(activities[1])
-                        ActivityView(activities[2])
-                        ActivityView(activities[3])
-                    }
-                    .padding(.top, 10)
-                    
-                    Spacer()
-                }.padding(Sizes.paddingPage)
+            VStack(alignment: .leading, spacing: Sizes.padding) {
+                SelectComponent(label: "Tipo da atividade", icon: "text.document", itens: activityTypeList, valueSelected: $typeActivitySelected)
+                
+                SelectComponent(label: "Status", icon: "circle", itens: statusList, valueSelected: $statusSelected)
+                
+                InputComponent(label: "Título", placeholder: "Digite o título da atividade", value: $title)
+                
+                MomentSelectorComponent(date: $date)
+                
+                SelectComponent(label: "Matéria", icon: "book.closed", itens: subjects, valueSelected: $subjectSelected)
+                
+                InputComponent(label: "Local", placeholder: "Digite o local onde a atividade ocorrerá", value: $local)
+                
+                TextAreaComponent(label: "Anotação", placeholder: "Digite aqui sua anotação...", value: $note)
+                
+                Spacer()
             }
-            .navigationTitle("Esta Semana")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(Color.colorBackground, for: .navigationBar, .tabBar)
-            .toolbarBackground(.visible, for: .navigationBar, .navigationBar)
+            .padding(Sizes.paddingPage)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                            Button {
+                                isShowingSheet = false
+                            } label: {
+                                Text("Cancelar").foregroundColor(.red)
+                            }
+                        }
+
+                        ToolbarItem(placement: .principal) {
+                            Text("Adicionar atividade")
+                                .foregroundColor(.colorText)
+                                .bold()
+                        }
+
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button {
+                                
+                            } label: {
+                                Text("Salvar").bold().foregroundColor(.colorGreen)
+                            }
+                        }
+            }
         }
+        
     }
 }
 
+#Preview {
+    AddActivityView(isShowingSheet: .constant(true))
+}

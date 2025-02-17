@@ -1,33 +1,34 @@
 import SwiftUI
 import SwiftData
 
-struct InputComponent: View {
+struct SelectComponent: View {
     var label: String
-    var placeholder: String
-    @Binding var value: String
-    
+    var icon: String
+    let itens: [String]
+    @Binding var valueSelected: Int
     var body: some View {
-        VStack(alignment: .leading) {
+        HStack {
+            Image(systemName: icon).resizable().scaledToFit().frame(width: 20, height: 20).foregroundColor(Color.colorGreen)
             Text(label)
-                .font(.system(size: 14, weight: .medium))
+                .font(.system(size: 16, weight: .regular))
                 .foregroundColor(.colorText)
-                .padding(.bottom, -6)
-            HStack {
-                TextField(placeholder, text: $value)
-                    .frame(height: 40)
-                    .padding(EdgeInsets(top: 0, leading: Sizes.padding, bottom: 0, trailing: Sizes.padding))
-                    
-                    .foregroundColor(Color.colorText)
-                      .font(.system(size: 14))
-                      .multilineTextAlignment(.leading)
-            }.background(Color.colorForeground)
-            .cornerRadius(Sizes.radius)
+                .padding(.leading, 4)
+            Spacer()
+            Picker(selection: $valueSelected, label: Text(label)) {
+                        ForEach(0..<itens.count, id: \.self) {
+                            Text(itens[$0])
+                      }
+            }.accentColor(.colorTextGray)
         }
+        .padding(EdgeInsets(top: 0, leading: Sizes.paddingPage, bottom: 0, trailing: Sizes.padding))
+        .frame(height: 52)
+        .background(Color.colorForeground)
+        .cornerRadius(Sizes.radius)
     }
 }
 
 #Preview {
-    @Previewable @State var inputValue: String = ""
+    @Previewable @State var valueSelected: Int = 0
     
-    InputComponent(label: "Nome", placeholder: "Digite o nome", value: $inputValue)
+    SelectComponent(label: "Nome", icon: "plus", itens: ["azul", "amarelo"], valueSelected: $valueSelected)
 }
