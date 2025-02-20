@@ -11,6 +11,9 @@ struct ClassesView: View {
                                                  Subject(title: "Português", color: Color.blue)], createAt: Date.now)
     ]
     
+    @State var isShowingSubjectsSheet: Bool
+    @State var classSelected: Class?
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -26,7 +29,32 @@ struct ClassesView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbarBackground(Color.colorBackground, for: .navigationBar, .tabBar)
                 .toolbarBackground(.visible, for: .navigationBar, .navigationBar)
+            
         }
     }
+}
+
+#Preview {
+    var p4Subjects: [Subject] = [
+        Subject(title: "Apple", color: Color.red),
+        Subject(title: "MFDS", color: Color.gray)
+        
+    ]
+    
+    var p5Subjects: [Subject] = [
+        Subject(title: "Huawei", color: Color.red),
+        Subject(title: "Química", color: Color.purple)
+        
+    ]
+    
+    var classes = [
+        Class(name: "Info p4", subjects: p4Subjects, createAt: Date.now),
+        Class(name: "Info p5", subjects: p5Subjects, createAt: Date.now)
+    ]
+    
+    
+    
+    
+    ClassesView(isShowingSubjectsSheet: false)
 }
 

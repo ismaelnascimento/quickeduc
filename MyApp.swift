@@ -7,7 +7,7 @@ struct MyApp: App {
         WindowGroup {
             MainView()
                 .accentColor(Color.colorGreen)
-//                .modelContainer(for: [Task.self, Category.self])
+                .modelContainer(for: [Class.self])
         }
         
     }

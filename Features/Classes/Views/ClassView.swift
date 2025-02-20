@@ -9,12 +9,13 @@ import SwiftUI
 
 struct ClassView: View {
     let classItem: Class
+    @State var isShowingSubjectsSheet: Bool
     
     init(_ classItem: Class) {
-       self.classItem = classItem
-        
+        self.classItem = classItem
+        self.isShowingSubjectsSheet = false
     }
-
+    
     var body: some View {
         HStack{
             Image(systemName: "circle").resizable().scaledToFit().frame(width: 28, height: 28).foregroundColor(Color.colorGreen)
@@ -27,7 +28,15 @@ struct ClassView: View {
             
             Spacer()
             
-            Image(systemName: "book.closed").resizable().scaledToFit().frame(width: 24, height: 24).foregroundColor(Color.colorGreen)
+            Button {
+                isShowingSubjectsSheet = true
+            } label: {
+                Image(systemName: "book.closed").resizable().scaledToFit().frame(width: 24, height: 24).foregroundColor(Color.colorGreen)
+            }
+            .sheet(isPresented: $isShowingSubjectsSheet) {
+                ClassSubjectsManager(classItem: classItem, isShowingSheet: $isShowingSubjectsSheet)
+            }
+            
         }
         .frame(height: 90)
         .padding(.horizontal, Sizes.padding)
