@@ -2,23 +2,33 @@ import SwiftUI
 import SwiftData
 
 struct ActivitiesView: View {
-    var groups = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"]
-    @State var group: String = "Seg"
+    @Environment(\.modelContext) var modelContext
+    
+    let weekDays = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"]
+    @State var weekDay: String = "Seg"
+    
+    var activities: [Activity] = [
+        Activity(title: "Prova", createAt: Date.now, status: StatusActivity.todo, subject: Subject(title: "Matemática", color: Color.indigo),  type: TypeActivity.test, date: Date.now),
+        Activity(title: "Evento",  createAt: Date.now, status: StatusActivity.done,subject: Subject(title: "Apple", color: Color.green), local: "Planalto Caucaia",  type: TypeActivity.event, date: Date.now),
+        Activity(title: "Apresentação",  createAt: Date.now, status: StatusActivity.done, subject: Subject(title: "Geografia", color: Color.pink), type: TypeActivity.presentation, date: Date.now),
+        Activity(title: "Tarefa",  createAt: Date.now, status: StatusActivity.doing,subject: Subject(title: "Português", color: Color.blue), type: TypeActivity.task, date: Date.now),
+    ]
+    
+    //    @Query var activities: [Activity]
+    
+    @State var isShowingSheetActivity: Bool = false
+    
+    var filteredActivities: [Activity] {
+        activities.filter {
+            $0.getWeekDay() == weekDay && Calendar.current.isDateInThisWeek($0.date)
+        }
+    }
     
     init() {
         UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(Color.colorGreenPastel)
         UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(Color.colorText)], for: .selected)
         UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(Color.colorTextGray)], for: .normal)
     }
-    
-    var activities: [ActivityProtocol] = [
-        Test(title: "Prova", createAt: Date.now, status: StatusActivity.todo, subject: Subject(title: "Matemática", color: Color.indigo),  type: TypeActivity.test, date: Date.now),
-        Event(title: "Evento",  createAt: Date.now, status: StatusActivity.done,subject: Subject(title: "Apple", color: Color.green), local: "Planalto Caucaia",  type: TypeActivity.event, date: Date.now),
-        Presentation(title: "Apresentação",  createAt: Date.now, status: StatusActivity.done, subject: Subject(title: "Geografia", color: Color.pink), type: TypeActivity.presentation, date: Date.now),
-        Task(title: "Tarefa",  createAt: Date.now, status: StatusActivity.doing,subject: Subject(title: "Português", color: Color.blue), type: TypeActivity.task, date: Date.now),
-    ]
-    
-    @State var isShowingSheetActivity: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -53,8 +63,8 @@ struct ActivitiesView: View {
                         
                         
                         // Filter day week
-                        Picker("Pick A Group", selection: $group) {
-                            ForEach(groups, id: \.self) {
+                        Picker("Pick A Group", selection: $weekDay) {
+                            ForEach(weekDays, id: \.self) {
                                 Text($0)
                             }
                         }
@@ -64,27 +74,32 @@ struct ActivitiesView: View {
                         // Activities list
                         
                         VStack {
-                            ActivityView(activities[0])
-                            ActivityView(activities[1])
-                            ActivityView(activities[2])
-                            ActivityView(activities[3])
+                            ForEach(filteredActivities) { activity in
+                                ActivityView(activity)
+                            }
                         }
                         .padding(.top, 10)
                         
                         Spacer()
                     }.padding(Sizes.paddingPage)
                 }
-                
                 .sheet(isPresented: $isShowingSheetActivity) {
-                    AddActivityView(isShowingSheet: $isShowingSheetActivity)
+                    SaveActivityView(isShowingSheet: $isShowingSheetActivity, activity: nil)
                         .presentationDetents([.height(700), .large])
                 }
                 .navigationTitle("Esta Semana")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbarBackground(Color.colorBackground, for: .navigationBar, .tabBar)
                 .toolbarBackground(.visible, for: .navigationBar, .navigationBar)
+            }.onAppear() {
+                let weekTodayIndex = Calendar.current.component(.weekday, from: Date.now)
+                weekDay = weekDays[weekTodayIndex - 2]
             }
         }
     }
 }
 
+#Preview {
+    
+    ActivitiesView()
+}
