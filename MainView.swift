@@ -2,7 +2,6 @@ import SwiftUI
 import SwiftData
 
 struct MainView: View {
-    
     init() {
         UITabBar.appearance().backgroundColor = UIColor(Color.colorGreenPastel)
     }
@@ -16,7 +15,7 @@ struct MainView: View {
                         }
 
 
-            ClassesView()
+            ClassesView(isShowingSubjectsSheet: false)
                         .tabItem {
                             Label("Turmas", systemImage: "person.3")
                         }

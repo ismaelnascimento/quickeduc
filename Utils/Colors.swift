@@ -28,4 +28,11 @@ extension Color {
     static let colorText = Color(hex: 0x070907)
     static let colorText60 = Color(hex: 0x101110)
     static let colorTextGray = Color(hex: 0x7A8079)
+    // PALETA DE COR DAS MATÉRIAS
+    
+    static let subjectsPalette = [
+        blue: Color(hex: 0x89A8B2),
+        purple: Color(hex: 0xCB9DF0)
+    ]
+    
 }

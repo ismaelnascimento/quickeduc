@@ -5,15 +5,13 @@ import SwiftData
 class User {
     var name: String
     var email: String
-    var password: String
-    var education: String
-    var birthday: String
+    private var password: String
+    var selectedClass: Class
 
-    init(name: String, email: String, password: String, education: String, birthday: String) {
+    init(name: String, email: String, password: String, education: String, birthday: String, selectedClass: Class) {
         self.name = name
         self.email = email
         self.password = password
-        self.education = education
-        self.birthday = birthday
+        self.selectedClass = selectedClass
     }
 }
