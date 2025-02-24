@@ -41,6 +41,7 @@ struct ClassSubjectsManager: View {
                                 showingAlert = true
                             }
                         }
+                        
                     } label: {
                         Image(systemName: "plus.circle").resizable().scaledToFit().frame(width: 24, height: 24).foregroundColor(.colorGreen)
                     }.alert("A matéria \(title) já existe", isPresented: $showingAlert) {
@@ -55,7 +56,9 @@ struct ClassSubjectsManager: View {
                         Text(subject.title)
                             .padding(Sizes.padding)
                             .foregroundStyle(subject.colorComponent.color).bold()
+                        
                         Spacer()
+                        
                         Button {
                             if let index = classItem.subjects.firstIndex(of: subject) {
                                 classItem.subjects.remove(at: index)
@@ -93,6 +96,8 @@ struct ClassSubjectsManager: View {
                     }
                 }
         }
+        
+        
     }
 }
 

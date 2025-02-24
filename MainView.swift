@@ -15,7 +15,7 @@ struct MainView: View {
                         }
 
 
-            ClassesView(isShowingSubjectsSheet: false)
+            ClassesView(isShowingClassCreatorSheet: false, isShowingSubjectManagerSheet: false)
                         .tabItem {
                             Label("Turmas", systemImage: "person.3")
                         }
