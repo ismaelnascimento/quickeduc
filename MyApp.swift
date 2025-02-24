@@ -9,6 +9,5 @@ struct MyApp: App {
                 .accentColor(Color.colorGreen)
                 .modelContainer(for: [Class.self, Activity.self])
         }
-        
     }
 }

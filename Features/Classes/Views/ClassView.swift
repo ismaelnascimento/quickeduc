@@ -6,19 +6,34 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ClassView: View {
     let classItem: Class
+    let justView: Bool?
     @State var isShowingSubjectsSheet: Bool
     
-    init(_ classItem: Class) {
+    @Query var classes: [Class]
+    
+    init(_ classItem: Class, justView: Bool?) {
         self.classItem = classItem
         self.isShowingSubjectsSheet = false
+        self.justView = justView
     }
     
     var body: some View {
         HStack{
-            Image(systemName: "circle").resizable().scaledToFit().frame(width: 28, height: 28).foregroundColor(Color.colorGreen)
+            if justView != nil && justView == true {
+                Image(systemName: "person.3").resizable().scaledToFit().frame(width: 34, height: 34).foregroundColor(Color.colorGreen)
+            } else {
+                Button {
+                    classes.first { $0.isAtual }?.isAtual = false
+                    
+                    classItem.isAtual.toggle()
+                } label: {
+                    Image(systemName: !classItem.isAtual ?  "circle" : "checkmark.circle.fill").resizable().scaledToFit().frame(width: 28, height: 28).foregroundColor(Color.colorGreen)
+                }
+            }
                 
             Text(classItem.name)
                     .padding(.leading, 4)
@@ -28,15 +43,17 @@ struct ClassView: View {
             
             Spacer()
             
-            Button {
-                isShowingSubjectsSheet = true
-            } label: {
-                Image(systemName: "book.closed").resizable().scaledToFit().frame(width: 24, height: 24).foregroundColor(Color.colorGreen)
+            if justView != nil && justView == true {
+            } else {
+                Button {
+                    isShowingSubjectsSheet = true
+                } label: {
+                    Image(systemName: "book.closed").resizable().scaledToFit().frame(width: 24, height: 24).foregroundColor(Color.colorGreen)
+                }
+                .sheet(isPresented: $isShowingSubjectsSheet) {
+                    ClassSubjectsManager(classItem: classItem, isShowingSheet: $isShowingSubjectsSheet).presentationDetents([.height(700), .large])
+                }
             }
-            .sheet(isPresented: $isShowingSubjectsSheet) {
-                ClassSubjectsManager(classItem: classItem, isShowingSheet: $isShowingSubjectsSheet)
-            }
-            
         }
         .frame(height: 90)
         .padding(.horizontal, Sizes.padding)
@@ -52,11 +69,11 @@ struct ClassView: View {
         Subject(title: "Português", color: Color.blue)
     ]
     var classes: [Class] = [
-        Class(name: "P4 Informática", subjects: subjects, createAt: Date.now),
-        Class(name: "P5 Informática", subjects: subjects, createAt: Date.now)
+        Class(name: "P4 Informática", subjects: subjects, createAt: Date.now, isAtual: false),
+        Class(name: "P5 Informática", subjects: subjects, createAt: Date.now, isAtual: false)
     ]
     VStack {
-        ClassView(classes[0])
-        ClassView(classes[1])
+        ClassView(classes[0], justView: false)
+        ClassView(classes[1], justView: false)
     }
 }

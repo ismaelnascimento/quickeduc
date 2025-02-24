@@ -4,11 +4,12 @@ import SwiftData
 struct ClassCreator: View {
     
     @Environment(\.modelContext) private var modelContext
+    @Query var classes: [Class]
     
     @State var title: String = ""
     @Binding var isShowingSheet: Bool
     @Binding var isShowingSubjectManagerSheet: Bool
-    @Binding var classes: [Class]
+    
     @State var ghostClass: Class = Class(name: "", subjects:[
         
         Subject(title: "Português", color: .red),
@@ -16,7 +17,7 @@ struct ClassCreator: View {
         Subject(title: "Biologia", color: .green),
         Subject(title: "História", color: .yellow)
         
-    ], createAt: Date.now)
+    ], createAt: Date.now, isAtual: false)
     
     var body: some View {
         
@@ -27,11 +28,9 @@ struct ClassCreator: View {
                 .frame(width: 375)
             Button{
                 if title != "" {
+                    let newClass = Class(name: title, subjects: ghostClass.subjects, createAt: Date.now, isAtual: false)
                     
-                    var newClass = Class(name: title, subjects: ghostClass.subjects, createAt: Date.now)
-                    classes.append(newClass)
                     modelContext.insert(newClass)
-                    try? modelContext.save()
                     
                     ghostClass.subjects = [
                         
@@ -47,7 +46,7 @@ struct ClassCreator: View {
             } label: {
                 Text("clica em mim!!!!!")
             }
-                
+            
         }
         
     }

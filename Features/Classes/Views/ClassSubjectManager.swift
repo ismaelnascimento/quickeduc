@@ -9,57 +9,66 @@ struct ClassSubjectsManager: View {
     @State var title: String = ""
     @State var color: Color = Color.colorGreen
     
+    @State var showingAlert = false
+    
     var body: some View {
-        
-        NavigationStack {
+        NavigationView {
             VStack(alignment: HorizontalAlignment.leading){
+                ClassView(classItem, justView: true)
+                    .padding(.vertical, Sizes.padding)
                 
                 HStack(alignment: VerticalAlignment.center){
                     InputComponent(label: "Título da matéria", placeholder: "Digite o título da matéria...", value: $title)
-                        .frame(width: 225, height: 150)
+                        .frame(width: 270, height: 150)
                         .padding(.bottom, Sizes.padding)
-                    ColorPicker("", selection: 	$color)
+                    ColorPicker("", selection: 	$color).padding(.trailing, 6)
                     
                     Button {
-                        if title != "" {
+                        if (!title.isEmpty) {
                             var titleExists: Bool = false
                             for subject in classItem.subjects {
                                 if subject.title == title {
                                     titleExists = true
                                 }
                             }
-                        
+                            
                             if !titleExists {
                                 let newSubject = Subject(title: title, color: color)
                                 classItem.subjects.append(newSubject)
+                                title = ""
+                                color = Color.colorGreen
+                            } else {
+                                showingAlert = true
+                            }
                         }
-                    }
                         
                     } label: {
-                        Label("", systemImage: "plus.circle")
+                        Image(systemName: "plus.circle").resizable().scaledToFit().frame(width: 24, height: 24).foregroundColor(.colorGreen)
+                    }.alert("A matéria \(title) já existe", isPresented: $showingAlert) {
+                        Button("OK", role: .cancel) { }
                     }
                 }
-                .frame(width: 300, height: 50)
+                .frame(height: 50)
+                .padding(.vertical, Sizes.padding)
                 
                 ForEach(classItem.subjects) {subject in
-                    
                     HStack {
                         Text(subject.title)
                             .padding(Sizes.padding)
-                            .foregroundStyle(subject.colorComponent.color)
+                            .foregroundStyle(subject.colorComponent.color).bold()
+                        
                         Spacer()
-                        Button{
-                            let index = classItem.subjects.firstIndex(of: subject)
-                            classItem.subjects.remove(at: index!)
-                            modelContext.delete(subject)
-                            
-                            
+                        
+                        Button {
+                            if let index = classItem.subjects.firstIndex(of: subject) {
+                                classItem.subjects.remove(at: index)
+                            }
                         } label: {
                             Label("", systemImage: "trash")
                         }.foregroundStyle(subject.colorComponent.color)
                             .padding(Sizes.padding - 8)
                     }
-                    .frame(width: 300, height: 50)
+                    .frame(height: 50)
                     .background(subject.colorComponent.color.quinary)
                     .cornerRadius(Sizes.radius)
                     .overlay(
@@ -67,35 +76,39 @@ struct ClassSubjectsManager: View {
                             .stroke(subject.colorComponent.color, lineWidth: 0.5)
                     )
                 }
-            }
-        }
-        .toolbar{
-            ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
-                Button{
-                    isShowingSheet = false
-                } label: {
-                    Text("Cancelar")
-                        .foregroundStyle(.red)
+            }.padding(.horizontal, Sizes.paddingPage)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .navigationTitle("Gerenciar matérias")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            isShowingSheet = false
+                        } label: {
+                            Text("Cancelar").foregroundColor(.red)
+                        }
+                    }
+                    
+                    ToolbarItem(placement: .principal) {
+                        Text("Gerenciar matérias")
+                            .foregroundColor(.colorText)
+                            .bold()
+                    }
                 }
-            }
-            
-            ToolbarItem(placement: ToolbarItemPlacement.principal) {
-                Text("Gerenciar matérias da turma")
-            }
-            
         }
+        
+        
     }
 }
 
 #Preview {
     
     var subjects: [Subject] = [
-        
         Subject(title: "oi", color: .red),
         Subject(title: "matéria", color: .green)
     ]
     
-    var classItem = Class(name: "turma do mael", subjects: subjects, createAt: Date.now)
+    var classItem = Class(name: "turma do mael", subjects: subjects, createAt: Date.now, isAtual: false)
     
     ClassSubjectsManager(classItem: classItem ,isShowingSheet: .constant(true))
 }

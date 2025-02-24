@@ -7,19 +7,34 @@ struct ActivitiesView: View {
     let weekDays = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"]
     @State var weekDay: String = "Seg"
     
-    var activities: [Activity] = [
-        Activity(title: "Prova", createAt: Date.now, status: StatusActivity.todo, subject: Subject(title: "Matemática", color: Color.indigo),  type: TypeActivity.test, date: Date.now),
-        Activity(title: "Evento",  createAt: Date.now, status: StatusActivity.done,subject: Subject(title: "Apple", color: Color.green), local: "Planalto Caucaia",  type: TypeActivity.event, date: Date.now),
-        Activity(title: "Apresentação",  createAt: Date.now, status: StatusActivity.done, subject: Subject(title: "Geografia", color: Color.pink), type: TypeActivity.presentation, date: Date.now),
-        Activity(title: "Tarefa",  createAt: Date.now, status: StatusActivity.doing,subject: Subject(title: "Português", color: Color.blue), type: TypeActivity.task, date: Date.now),
-    ]
+//    var activities: [Activity] = [
+//        Activity(title: "Prova", createAt: Date.now, status: StatusActivity.todo, subject: Subject(title: "Matemática", color: Color.indigo),  type: TypeActivity.test, date: Date.now),
+//        Activity(title: "Evento",  createAt: Date.now, status: StatusActivity.done,subject: Subject(title: "Apple", color: Color.green), local: "Planalto Caucaia",  type: TypeActivity.event, date: Date.now),
+//        Activity(title: "Apresentação",  createAt: Date.now, status: StatusActivity.done, subject: Subject(title: "Geografia", color: Color.pink), type: TypeActivity.presentation, date: Date.now),
+//        Activity(title: "Tarefa",  createAt: Date.now, status: StatusActivity.doing,subject: Subject(title: "Português", color: Color.blue), type: TypeActivity.task, date: Date.now),
+//    ]
     
-    //    @Query var activities: [Activity]
+    @Query var activities: [Activity]
+    
+    @Query private var classes: [Class]
+    
+    var selectedClass: Class? {
+        classes.first { $0.isAtual }
+    }
+    
+    var filterActivitiesBySubjects: [Activity] {
+        guard let selectedClass = selectedClass else { return activities }
+        return activities.filter { activity in
+//  -> COLOCAR ASSIM POIS QUANDO DELETAR UMA MATÉRIA DA TURMA IRIA TER QUE DELETAR TODAS AS ATIVIDADES COM AQUELA MATÉRIA          guard let subjectActivity = activity.subject else { return false }
+            let subjectActivity = activity.subject
+            return selectedClass.subjects.contains { $0.id == subjectActivity.id }
+        }
+    }
     
     @State var isShowingSheetActivity: Bool = false
     
     var filteredActivities: [Activity] {
-        activities.filter {
+        filterActivitiesBySubjects.filter {
             $0.getWeekDay() == weekDay && Calendar.current.isDateInThisWeek($0.date)
         }
     }

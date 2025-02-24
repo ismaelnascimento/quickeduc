@@ -17,7 +17,14 @@ struct SaveActivityView: View {
     @State var note: String = ""
     
     @State var subjectSelected: Int = 0
-    var subjects: [Subject] = [Subject(title: "Matemática", color: Color.indigo), Subject(title: "Apple", color: Color.green)]
+//    var subjects: [Subject] = [Subject(title: "Matemática", color: Color.indigo), Subject(title: "Apple", color: Color.green)]
+    
+    @Query private var classes: [Class]
+    
+    var selectedClass: Class? {
+        classes.first { $0.isAtual }
+    }
+    @State var subjects: [Subject] = []
     @State var subjectsStrings: [String] = []
     
     @State var typeActivitySelected: Int = 0
@@ -113,7 +120,10 @@ struct SaveActivityView: View {
                 }
             }
         }.onAppear() {
-            subjectsStrings = subjects.map { $0.title }
+            if let selectedClass {
+                subjects = selectedClass.subjects
+                subjectsStrings = subjects.map { $0.title }
+            }
             
             if let activity {
                 title = activity.title

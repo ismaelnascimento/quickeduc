@@ -2,7 +2,6 @@ import SwiftUI
 import SwiftData
 
 struct MainView: View {
-    
     init() {
         UITabBar.appearance().backgroundColor = UIColor(Color.colorGreenPastel)
     }
