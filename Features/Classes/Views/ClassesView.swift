@@ -2,17 +2,17 @@ import SwiftUI
 import SwiftData
 
 struct ClassesView: View {
-    var classes: [Class] = [
-        Class(name: "P4 Informática", subjects: [Subject(title: "Matemática", color: Color.indigo),
-                                                 Subject(title: "Geografia", color: Color.pink),
-                                                 Subject(title: "Português", color: Color.blue)], createAt: Date.now),
-        Class(name: "P518 Informática", subjects: [Subject(title: "Matemática", color: Color.indigo),
-                                                 Subject(title: "Geografia", color: Color.pink),
-                                                 Subject(title: "Português", color: Color.blue)], createAt: Date.now)
-    ]
+    @State var classes: [Class] = []
+    //    Class(name: "P4 Informática", subjects: [Subject(title: "Matemática", color: Color.indigo),
+     //                                            Subject(title: "Geografia", color: Color.pink),
+      //                                           Subject(title: "Português", color: Color.blue)], createAt: Date.now),
+      //  Class(name: "P518 Informática", subjects: [Subject(title: "Matemática", color: Color.indigo),
+      //                                           Subject(title: "Geografia", color: Color.pink),
+     //                                            Subject(title: "Português", color: Color.blue)], createAt: Date.now)
     
-    @State var isShowingSubjectsSheet: Bool
-    @State var classSelected: Class?
+    
+    @State var isShowingClassCreatorSheet: Bool
+    @State var isShowingSubjectManagerSheet: Bool
     
     var body: some View {
         NavigationStack {
@@ -25,10 +25,18 @@ struct ClassesView: View {
                 }.padding(Sizes.paddingPage)
             }
             .navigationTitle("Turmas")
-            .navigationBarItems(trailing: Image(systemName: "plus.circle").resizable().scaledToFit().frame(width: 24, height: 24).foregroundColor(Color.colorGreen).padding(.trailing, Sizes.paddingNavigationBar))
+            .navigationBarItems(trailing: Button{
+                isShowingClassCreatorSheet = true
+            } label: {
+                Image(systemName: "plus.circle")
+            }.frame(width: 24, height: 24).foregroundColor(Color.colorGreen).padding(.trailing, Sizes.paddingNavigationBar))
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbarBackground(Color.colorBackground, for: .navigationBar, .tabBar)
                 .toolbarBackground(.visible, for: .navigationBar, .navigationBar)
+                
+                .sheet(isPresented: $isShowingClassCreatorSheet) {
+                    ClassCreator(isShowingSheet: $isShowingClassCreatorSheet, isShowingSubjectManagerSheet: $isShowingSubjectManagerSheet, classes: $classes)
+                }
             
         }
     }
@@ -53,8 +61,6 @@ struct ClassesView: View {
     ]
     
     
-    
-    
-    ClassesView(isShowingSubjectsSheet: false)
+    ClassesView(isShowingClassCreatorSheet: false, isShowingSubjectManagerSheet: false)
 }
 

@@ -21,19 +21,19 @@ struct ClassSubjectsManager: View {
                     ColorPicker("", selection: 	$color)
                     
                     Button {
-                        
-                        var titleExists: Bool = false
-                        for subject in classItem.subjects {
-                            if subject.title == title {
-                                titleExists = true
+                        if title != "" {
+                            var titleExists: Bool = false
+                            for subject in classItem.subjects {
+                                if subject.title == title {
+                                    titleExists = true
+                                }
                             }
-                        }
                         
-                        if !titleExists {
-                            let newSubject = Subject(title: title, color: color)
-                            classItem.subjects.append(newSubject)
+                            if !titleExists {
+                                let newSubject = Subject(title: title, color: color)
+                                classItem.subjects.append(newSubject)
                         }
-                        
+                    }
                         
                     } label: {
                         Label("", systemImage: "plus.circle")
@@ -48,7 +48,13 @@ struct ClassSubjectsManager: View {
                             .padding(Sizes.padding)
                             .foregroundStyle(subject.colorComponent.color)
                         Spacer()
-                        Button{} label: {
+                        Button{
+                            let index = classItem.subjects.firstIndex(of: subject)
+                            classItem.subjects.remove(at: index!)
+                            modelContext.delete(subject)
+                            
+                            
+                        } label: {
                             Label("", systemImage: "trash")
                         }.foregroundStyle(subject.colorComponent.color)
                             .padding(Sizes.padding - 8)
