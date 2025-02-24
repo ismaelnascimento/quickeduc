@@ -21,7 +21,7 @@ struct ClassCreator: View {
     
     func save() {
         if title != "" {
-            let newClass = Class(name: title, subjects: ghostClass.subjects, createAt: Date.now, isAtual: false)
+            let newClass = Class(name: title, subjects: ghostClass.subjects, createAt: Date.now, isAtual: classes.count == 0 ? true : false)
             
             modelContext.insert(newClass)
             
@@ -42,12 +42,12 @@ struct ClassCreator: View {
         NavigationView {
             VStack(spacing: Sizes.padding) {
                 InputComponent(label: "Título da turma", placeholder: "Digite o título da turma...", value: $title)
-                    .frame(width: 375)
-                ClassSubjectManagerButton(isShowingSheet: $isShowingSubjectManagerSheet, titleClass: title, classItem: ghostClass)
-                    .frame(width: 375)
+                    .frame(width: 350)
+                ClassSubjectManagerButton(isShowingSheet: $isShowingSubjectManagerSheet, classItem: ghostClass)
+                    .frame(width: 350)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                .padding(.horizontal, Sizes.paddingPage)
+                .padding(Sizes.padding)
                 .navigationTitle("Adicionar turma")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {

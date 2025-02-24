@@ -25,8 +25,7 @@ struct ActivitiesView: View {
     var filterActivitiesBySubjects: [Activity] {
         guard let selectedClass = selectedClass else { return activities }
         return activities.filter { activity in
-//  -> COLOCAR ASSIM POIS QUANDO DELETAR UMA MATÉRIA DA TURMA IRIA TER QUE DELETAR TODAS AS ATIVIDADES COM AQUELA MATÉRIA          guard let subjectActivity = activity.subject else { return false }
-            let subjectActivity = activity.subject
+            guard let subjectActivity = activity.subject else { return false }
             return selectedClass.subjects.contains { $0.id == subjectActivity.id }
         }
     }

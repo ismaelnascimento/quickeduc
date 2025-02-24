@@ -152,8 +152,6 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
-<<<<<<< HEAD
-=======
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.SymbolicBreakpoint">
          <BreakpointContent
@@ -193,6 +191,5 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
->>>>>>> 2bcb1093b4dd3e3589d63df217b0f9f6ce4a3fc3
    </Breakpoints>
 </Bucket>

@@ -14,7 +14,10 @@ struct ActivityView: View {
     
     init(_ activity: Activity) {
         self.activity = activity
-        self.color = activity.subject.colorComponent.color
+        self.color = .colorGreenPastel
+        if let subject = activity.subject {
+            self.color = subject.colorComponent.color
+        }
         //       status = activity.status
     }
     
@@ -89,14 +92,14 @@ struct ActivityView: View {
                     }
                     
                     Spacer()
-                    
-                    Text(activity.subject.title)
-                        .font(.system(size: 14))
-                        .padding(.horizontal, 7)
-                        .foregroundColor(color)
-                        .background(color.quaternary)
-                        .cornerRadius(Sizes.radius)
-                    
+                    if let subject = activity.subject {
+                        Text(subject.title)
+                            .font(.system(size: 14))
+                            .padding(.horizontal, 7)
+                            .foregroundColor(color)
+                            .background(color.quaternary)
+                            .cornerRadius(Sizes.radius)
+                    }
                 }
             }
             

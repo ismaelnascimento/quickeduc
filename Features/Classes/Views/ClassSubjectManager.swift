@@ -14,8 +14,10 @@ struct ClassSubjectsManager: View {
     var body: some View {
         NavigationView {
             VStack(alignment: HorizontalAlignment.leading){
-                ClassView(classItem, justView: true)
-                    .padding(.vertical, Sizes.padding)
+                if (classItem.name != "") {
+                    ClassView(classItem, justView: true)
+                        .padding(.vertical, Sizes.padding)
+                }
                 
                 HStack(alignment: VerticalAlignment.center){
                     InputComponent(label: "Título da matéria", placeholder: "Digite o título da matéria...", value: $title)

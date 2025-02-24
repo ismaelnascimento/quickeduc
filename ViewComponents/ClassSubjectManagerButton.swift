@@ -3,7 +3,6 @@ import SwiftData
 
 struct ClassSubjectManagerButton: View {
     @Binding var isShowingSheet: Bool
-    var titleClass: String
     var classItem: Class
     
     var body: some View {
@@ -27,7 +26,7 @@ struct ClassSubjectManagerButton: View {
             .background(Color.colorForeground)
             .cornerRadius(Sizes.radius)
             .sheet(isPresented: $isShowingSheet){
-                ClassSubjectsManager(classItem: Class(name: titleClass, subjects:classItem.subjects, createAt: classItem.createAt, isAtual: false), isShowingSheet: $isShowingSheet)
+                ClassSubjectsManager(classItem: classItem, isShowingSheet: $isShowingSheet)
             }
         }
     }

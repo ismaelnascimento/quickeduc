@@ -19,7 +19,7 @@ struct SaveActivityView: View {
     @State var subjectSelected: Int = 0
 //    var subjects: [Subject] = [Subject(title: "Matemática", color: Color.indigo), Subject(title: "Apple", color: Color.green)]
     
-    @Query private var classes: [Class]
+    @Query var classes: [Class]
     
     var selectedClass: Class? {
         classes.first { $0.isAtual }
@@ -46,23 +46,12 @@ struct SaveActivityView: View {
             activity.title = title
             activity.note = note
             activity.local = local
-            
-            if let indexSubject = subjects.firstIndex(of: activity.subject) {
-                subjectSelected = indexSubject
-            }
-            
-            if let indexType = activityTypeList.firstIndex(of: activity.type) {
-                typeActivitySelected = indexType
-            }
-            
-            if let indexStatus = statusList.firstIndex(of: activity.status) {
-                statusSelected = indexStatus
-            }
-            
-            date = activity.date
-            
+            activity.subject = subject
+            activity.type = type
+            activity.status = status
+            activity.date = date
         } else {
-            let activityToAdd: Activity = Activity(title: title, createAt: Date.now, status: status, subject: subject,  type: type, date: date)
+            let activityToAdd: Activity = Activity(title: title, createAt: Date.now, status: status, subject: subject,  note: note, local: local, type: type, date: date)
             
             if(activityToAdd.title != "") {
                 modelContext.insert(activityToAdd)
@@ -119,34 +108,38 @@ struct SaveActivityView: View {
                     }
                 }
             }
-        }.onAppear() {
-            if let selectedClass {
-                subjects = selectedClass.subjects
-                subjectsStrings = subjects.map { $0.title }
-            }
-            
-            if let activity {
-                title = activity.title
-                note = activity.note ?? ""
-                local = activity.local ?? ""
+        }.onAppear {
+                if let selectedClass {
+                    subjects = selectedClass.subjects
+                   
+                    subjectsStrings = subjects.map { $0.title }
+                }
+                
+                if let activity {
+                    title = activity.title
+                    note = activity.note ?? ""
+                    local = activity.local ?? ""
 
-                if let indexSubject = subjects.firstIndex(of: activity.subject) {
-                    subjectSelected = indexSubject
+                    if let subject = activity.subject {
+                        if let indexSubject = subjects.firstIndex(of: subject) {
+                            subjectSelected = indexSubject
+                        }
+                    }
+                    
+                    if let indexType = activityTypeList.firstIndex(of: activity.type) {
+                        typeActivitySelected = indexType
+                    }
+                    
+                    if let indexStatus = statusList.firstIndex(of: activity.status) {
+                        statusSelected = indexStatus
+                    }
+                    
+                    date = activity.date
                 }
-                
-                if let indexType = activityTypeList.firstIndex(of: activity.type) {
-                    typeActivitySelected = indexType
-                }
-                
-                if let indexStatus = statusList.firstIndex(of: activity.status) {
-                    statusSelected = indexStatus
-                }
-                
-                date = activity.date
             }
         }
         
-    }
+    
 }
 
 #Preview {
