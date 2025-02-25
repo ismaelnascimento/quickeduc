@@ -87,11 +87,17 @@ struct ActivitiesView: View {
                         
                         // Activities list
                         
-                        VStack {
-                            ForEach(filteredActivities) { activity in
-                                ActivityView(activity)
+                        VStack(alignment: .center) {
+                            if(filteredActivities.isEmpty) {
+                                Image("WithoutActivity")
+                                    .padding(.top, 80)
+                            } else {
+                                ForEach(filteredActivities) { activity in
+                                    ActivityView(activity)
+                                }
                             }
                         }
+                        
                         .padding(.top, 10)
                         
                         Spacer()

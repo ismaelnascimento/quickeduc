@@ -20,25 +20,40 @@ struct ClassesView: View {
     func deleteClass(at index: Int) {
         modelContext.delete(classes[index])
     }
+    @State var showingAlert = false
     
     var body: some View {
         NavigationStack {
             VStack {
-                VStack {
-                    ForEach(classes.indices, id: \.self) { index in
-                        ClassView(classes[index], justView: false)
+                List {
+                    if(classes.isEmpty) {
+                        Image("WithoutClass")
+                            .resizable()
+                            .frame(height: 120)
+                            .padding(.top, 5)
                             .listRowSeparator(.hidden)
-                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                Button(role: .destructive) {
-                                    deleteClass(at: index)
-                                } label: {
-                                    Label("", systemImage: "trash")
+                    } else {
+                        ForEach(classes.indices, id: \.self) { index in
+                            ClassView(classes[index], justView: false)
+                                .listRowSeparator(.hidden)
+                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                    Button(role: .destructive) {
+                                        if (classes[index].isAtual) {
+                                            showingAlert = true
+                                        } else {
+                                            deleteClass(at: index)
+                                        }
+                                    } label: {
+                                        Label("", systemImage: "trash")
+                                    }.alert("Selecione outra turma antes de deletar essa.", isPresented: $showingAlert) {
+                                        Button("OK", role: .cancel) { }
+                                    }
                                 }
-                            }
+                        }
                     }
-                    Spacer()
-                }.padding(Sizes.padding)
-                //.listStyle(.plain)
+                    
+                }
+                .listStyle(.plain)
             }
             .navigationTitle("Turmas")
             .navigationBarItems(trailing: Button{

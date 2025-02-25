@@ -96,6 +96,16 @@ struct ClassSubjectsManager: View {
                             .foregroundColor(.colorText)
                             .bold()
                     }
+                    
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            withAnimation {
+                                isShowingSheet = false
+                            }
+                        } label: {
+                            Text("Pronto").bold().foregroundColor(.colorGreen)
+                        }
+                    }
                 }
         }
         
