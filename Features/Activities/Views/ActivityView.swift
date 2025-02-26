@@ -55,6 +55,8 @@ struct ActivityView: View {
                             "location.circle"
                         case TypeActivity.presentation:
                             "note.text"
+                        case TypeActivity.task:
+                            "note.text"
                         default:
                             "clock"
                         }
@@ -64,18 +66,21 @@ struct ActivityView: View {
                         ).resizable().scaledToFit().frame(width: 16, height: 16).foregroundColor(.colorTextGray)
                         
                         // pegando a informação correta para cada tipo \\
+                        var showNote = activity.note != nil ? activity.note != "" ? activity.note : "Sem anotações"  :  "Sem anotações"
                         let info = switch activity.type {
                         case TypeActivity.event:
-                            activity.local ?? "Não informado"
+                            activity.local != nil ? activity.local != "" ? activity.local : "Não informado" : "Não informado"
                         case TypeActivity.presentation:
-                            activity.note != nil ? "Há uma anotação" : "Sem anotações"
+                            showNote
+                        case TypeActivity.task:
+                            showNote
                             
                         default:
                             String(activity.date.formatted().suffix(5))
                         }
                         // pegando a informação correta para cada tipo \\
                         
-                        Text(info).font(.system(size: 14))
+                        Text(info ?? "").font(.system(size: 14))
                             .foregroundColor(Color.colorTextGray)
                     }
                 }.padding(.leading)
@@ -123,16 +128,13 @@ struct ActivityView: View {
 }
 
 #Preview {
-    //    var activities: [ActivityProtocol] = [
-    //        Test(title: "Prova", createAt: Date.now, status: StatusActivity.todo, subject: Subject(title: "Matemática", color: Color.indigo),  type: TypeActivity.test, date: Date.now),
-    //        Event(title: "Evento",  createAt: Date.now, status: StatusActivity.done,subject: Subject(title: "Apple", color: Color.green), local: "Planalto Caucaia",  type: TypeActivity.event, date: Date.now),
-    //        Presentation(title: "Apresentação",  createAt: Date.now, status: StatusActivity.done, subject: Subject(title: "Geografia", color: Color.pink), type: TypeActivity.presentation, date: Date.now),
-    //        Task(title: "Tarefa",  createAt: Date.now, status: StatusActivity.doing,subject: Subject(title: "Português", color: Color.blue), type: TypeActivity.task, date: Date.now),
-    //    ]
-    //    VStack {
-    //        ActivityView(activities[0])
-    //        ActivityView(activities[1])
-    //        ActivityView(activities[2])
-    //        ActivityView(activities[3])
-    //    }
+        var activities: [Activity] = [
+            Activity(title: "Prova", createAt: Date.now, status: StatusActivity.todo, subject: Subject(title: "Matemática", color: Color.indigo),  note: "", local: "Minha casa", type: TypeActivity.presentation, date: Date.now),
+//            Event(title: "Evento",  createAt: Date.now, status: StatusActivity.done,subject: Subject(title: "Apple", color: Color.green), local: "Planalto Caucaia",  type: TypeActivity.event, date: Date.now),
+//            Presentation(title: "Apresentação",  createAt: Date.now, status: StatusActivity.done, subject: Subject(title: "Geografia", color: Color.pink), type: TypeActivity.presentation, date: Date.now),
+//            Task(title: "Tarefa",  createAt: Date.now, status: StatusActivity.doing,subject: Subject(title: "Português", color: Color.blue), type: TypeActivity.task, date: Date.now),
+        ]
+        VStack {
+            ActivityView(activities[0])
+        }
 }

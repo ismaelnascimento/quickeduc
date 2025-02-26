@@ -50,11 +50,14 @@ struct SaveActivityView: View {
             activity.type = type
             activity.status = status
             activity.date = date
+            
+            isShowingSheet = false
         } else {
             let activityToAdd: Activity = Activity(title: title, createAt: Date.now, status: status, subject: subject,  note: note, local: local, type: type, date: date)
             
             if(activityToAdd.title != "") {
                 modelContext.insert(activityToAdd)
+                isShowingSheet = false
             }
         }
     }
@@ -98,14 +101,14 @@ struct SaveActivityView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
+                    let checkCanSave = title != ""
                     Button {
                         withAnimation {
                             save()
-                            isShowingSheet = false
                         }
                     } label: {
-                        Text("Salvar").bold().foregroundColor(.colorGreen)
-                    }
+                        Text("Salvar").bold().opacity(checkCanSave ? 1.0 : 0.5).foregroundColor(checkCanSave ? .colorGreen : .gray)
+                    }.disabled(!checkCanSave)
                 }
             }
         }.onAppear {

@@ -9,6 +9,7 @@ struct ClassCreator: View {
     @State var title: String = ""
     @Binding var isShowingSheet: Bool
     @Binding var isShowingSubjectManagerSheet: Bool
+    @State var concluedManagerSubjects: Bool = false
     
     @State var ghostClass: Class = Class(name: "", subjects:[
         
@@ -20,7 +21,7 @@ struct ClassCreator: View {
     ], createAt: Date.now, isAtual: false)
     
     func save() {
-        if title != "" {
+        if title != "" && concluedManagerSubjects {
             let newClass = Class(name: title, subjects: ghostClass.subjects, createAt: Date.now, isAtual: classes.count == 0 ? true : false)
             
             modelContext.insert(newClass)
@@ -43,7 +44,7 @@ struct ClassCreator: View {
             VStack(spacing: Sizes.padding) {
                 InputComponent(label: "Título da turma", placeholder: "Digite o título da turma...", value: $title)
                     .frame(width: 350)
-                ClassSubjectManagerButton(isShowingSheet: $isShowingSubjectManagerSheet, classItem: ghostClass)
+                ClassSubjectManagerButton(isShowingSheet: $isShowingSubjectManagerSheet, classItem: ghostClass, concluedManagerSubjects: $concluedManagerSubjects)
                     .frame(width: 350)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -66,14 +67,14 @@ struct ClassCreator: View {
                     }
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
+                        let checkCanSave = title != "" && concluedManagerSubjects
                         Button {
                             withAnimation {
                                 save()
-                                isShowingSheet = false
                             }
                         } label: {
-                            Text("Salvar").bold().foregroundColor(.colorGreen)
-                        }
+                            Text("Salvar").bold().opacity(checkCanSave ? 1.0 : 0.5).foregroundColor(checkCanSave ? .colorGreen : .gray)
+                        }.disabled(!checkCanSave)
                     }
                 }
             }

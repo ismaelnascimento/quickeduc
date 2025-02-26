@@ -12,6 +12,7 @@ struct ClassView: View {
     let classItem: Class
     let justView: Bool?
     @State var isShowingSubjectsSheet: Bool
+    @State var concluedManagerSubjects: Bool = false
     
     @Query var classes: [Class]
     
@@ -51,7 +52,7 @@ struct ClassView: View {
                     Image(systemName: "book.closed").resizable().scaledToFit().frame(width: 24, height: 24).foregroundColor(Color.colorGreen)
                 }
                 .sheet(isPresented: $isShowingSubjectsSheet) {
-                    ClassSubjectsManager(classItem: classItem, isShowingSheet: $isShowingSubjectsSheet).presentationDetents([.height(700), .large])
+                    ClassSubjectsManager(classItem: classItem, isShowingSheet: $isShowingSubjectsSheet, concluedManagerSubjects: $concluedManagerSubjects).presentationDetents([.height(700), .large])
                 }
             }
         }

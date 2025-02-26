@@ -25,7 +25,7 @@ struct ActivitiesView: View {
     var filterActivitiesBySubjects: [Activity] {
         guard let selectedClass = selectedClass else { return activities }
         return activities.filter { activity in
-            guard let subjectActivity = activity.subject else { return false }
+            guard let subjectActivity = activity.subject else { return true }
             return selectedClass.subjects.contains { $0.id == subjectActivity.id }
         }
     }

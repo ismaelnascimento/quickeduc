@@ -11,7 +11,7 @@ struct InputComponent: View {
             Text(label)
                 .font(.system(size: 14, weight: .medium))
                 .foregroundColor(.colorText)
-                .padding(.bottom, -6)
+                .padding(.bottom, -4)
             HStack {
                 TextField(placeholder, text: $value)
                     .frame(height: 40)

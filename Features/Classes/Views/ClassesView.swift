@@ -53,6 +53,7 @@ struct ClassesView: View {
                     }
                     
                 }
+                .padding(.vertical, Sizes.padding)
                 .listStyle(.plain)
             }
             .navigationTitle("Turmas")
