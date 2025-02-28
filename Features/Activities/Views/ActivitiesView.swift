@@ -99,6 +99,7 @@ struct ActivitiesView: View {
                             .padding(.top, 80)
                             .listRowSeparator(.hidden)
                             .buttonStyle(.plain)
+                            .frame(width: 350)
                     } else {
                         ForEach(filteredActivities.indices, id: \.self) { index in
                             ActivityView(filteredActivities[index])
