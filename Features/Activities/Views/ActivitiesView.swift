@@ -101,19 +101,20 @@ struct ActivitiesView: View {
                             .buttonStyle(.plain)
                             .frame(width: 350)
                     } else {
-                        ForEach(filteredActivities.indices, id: \.self) { index in
-                            ActivityView(filteredActivities[index])
-                                .listRowSeparator(.hidden)
-                                .buttonStyle(.plain)
-                                .listRowInsets(EdgeInsets(top: 5.0, leading: Sizes.padding, bottom: 5.0, trailing: Sizes.padding))
-                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                    Button(role: .destructive) {
-                                        modelContext.delete(filteredActivities[index])
-                                    } label: {
-                                        Label("", systemImage: "trash")
+                        ForEach(filteredActivities) { activity in
+                            if let index = activities.firstIndex(of: activity) {
+                                ActivityView(activity)
+                                    .listRowSeparator(.hidden)
+                                    .buttonStyle(.plain)
+                                    .listRowInsets(EdgeInsets(top: 5.0, leading: Sizes.padding, bottom: 5.0, trailing: Sizes.padding))
+                                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                        Button(role: .destructive) {
+                                            modelContext.delete(activities[index])
+                                        } label: {
+                                            Label("", systemImage: "trash")
+                                        }
                                     }
-                                }
-                                
+                            }
                             //                                .padding(.top, 10)
                             
                             
@@ -124,7 +125,7 @@ struct ActivitiesView: View {
                 .padding(.top, 5)
                 
                 //Spacer()
-            }.onAppear {
+            }.onAppear() {
                 weekDay = today
             }
             .listStyle(.plain)
