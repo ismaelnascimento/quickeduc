@@ -21,6 +21,11 @@ struct MainView: View {
                             .tabItem {
                                 Label("Atividades", systemImage: "calendar")
                             }
+                
+                History()
+                            .tabItem {
+                                Label("Histórico", systemImage: "clock")
+                            }
 
 
                 ClassesView(isShowingClassCreatorSheet: false, isShowingSubjectManagerSheet: false)
@@ -33,7 +38,9 @@ struct MainView: View {
                     UITabBar.appearance().backgroundColor = UIColor(Color.colorGreenPastel)
                 }
         } else {
-            Tellus(isShowingSheet: .constant(true), isShowingSubjectManagerSheet: $isShowingSubjectManagerSheet)
+            NavigationStack {
+                Tellus(isShowingSheet: .constant(true), isShowingSubjectManagerSheet: $isShowingSubjectManagerSheet)
+            }
         }
     }
 }

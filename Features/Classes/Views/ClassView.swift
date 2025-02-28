@@ -60,6 +60,8 @@ struct ClassView: View {
         .padding(.horizontal, Sizes.padding)
         .background(Color.colorForeground)
         .cornerRadius(Sizes.radius)
+        .listRowSeparator(.hidden)
+        //.listRowInsets(EdgeInsets())
     }
 }
 

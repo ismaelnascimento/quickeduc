@@ -17,6 +17,7 @@ let package = Package(
             name: "QuickEduc",
             targets: ["AppModule"],
             bundleIdentifier: "ifce.foundation.LikePets",
+            teamIdentifier: "W632AW96W5",
             displayVersion: "1.0",
             bundleVersion: "1",
             appIcon: .asset("AppIcon"),

@@ -11,10 +11,11 @@ struct ClassSubjectsManager: View {
     @Binding var concluedManagerSubjects: Bool
     
     @State var showingAlert = false
-    @State var showingAlertDelete = false
     
     @Query var activities: [Activity]
     @Query private var classes: [Class]
+    
+//    @State var showingAlertDelete = false
     
     var body: some View {
         NavigationView {
@@ -60,40 +61,46 @@ struct ClassSubjectsManager: View {
                 .frame(height: 50)
                 .padding(.vertical, Sizes.padding)
                 
-                ForEach(Array(classItem.subjects.enumerated()), id: \.offset) { i, subject in
-                    HStack {
-                        Text(subject.title)
-                            .padding(Sizes.padding)
-                            .foregroundStyle(subject.colorComponent.color).bold()
-                        
-                        Spacer()
-                        
-                        Button {
-                            showingAlertDelete = true
-                        } label: {
-                            Label("", systemImage: "trash")
-                        }.alert("Tem certeza que deseja deletar a matéria \(subject.title)?", isPresented: $showingAlertDelete) {
+                ForEach(classItem.subjects) { subject in
+                    if let index = classItem.subjects.firstIndex(of: subject) {
+                        HStack {
+                            Text(classItem.subjects[index].title)
+                                .padding(Sizes.padding)
+                                .foregroundStyle(subject.colorComponent.color).bold()
+                            
+                            Spacer()
+                            
                             Button {
+//                                showingAlertDelete = true
+                                classItem.subjects.remove(at: index)
                             } label: {
-                                Text("Cancelar")
-                            }
-                            Button {
-                                    classItem.subjects.remove(at: i)
-                            } label: {
-                                Text("Sim")
-                            }
-                        } message: {
-                            Text("Ao deletar essa matéria, todas as atividades associadas a essa matéria não serão mais visualizadas")
-                        }.foregroundStyle(subject.colorComponent.color)
-                            .padding(Sizes.padding - 8)
+                                Label("", systemImage: "trash")
+                            }.foregroundStyle(classItem.subjects[index].colorComponent.color)
+                                .padding(Sizes.padding - 8)
+                            //                            .alert("Tem certeza que deseja deletar a matéria \(classItem.subjects[index].title)?", isPresented: $showingAlertDelete) {
+                            //                                Button {
+                            //                                } label: {
+                            //                                    Text("Cancelar")
+                            //                                }
+                            //                                Button {
+                            //                                        classItem.subjects.remove(at: index)
+                            //
+                            //                                } label: {
+                            //                                    Text("Sim")
+                            //                                }
+                            //                            } message: {
+                            //                                Text("Ao deletar essa matéria, todas as atividades associadas a essa matéria não serão mais visualizadas")
+                            //                            }
+                        }
+                        .frame(height: 50)
+                        .background(classItem.subjects[index].colorComponent.color.quinary)
+                        .cornerRadius(Sizes.radius)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: Sizes.radius)
+                                .stroke(classItem.subjects[index].colorComponent.color, lineWidth: 0.5)
+                        )
                     }
-                    .frame(height: 50)
-                    .background(subject.colorComponent.color.quinary)
-                    .cornerRadius(Sizes.radius)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: Sizes.radius)
-                            .stroke(subject.colorComponent.color, lineWidth: 0.5)
-                    )
+                    
                 }
             }.padding(.horizontal, Sizes.paddingPage)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)

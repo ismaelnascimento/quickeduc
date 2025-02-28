@@ -40,7 +40,7 @@ struct Tellus: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(spacing: Sizes.padding) {
                 Image("Logo").resizable().frame(width: 174, height: 174).cornerRadius(.infinity)
                 Text("Personalize").font(.system(size: 36, weight: .semibold))
@@ -66,9 +66,9 @@ struct Tellus: View {
                 } label: {
                     Text("Vamos lá").font(.system(size: 17, weight: .semibold))
                         .foregroundColor(.colorText)
-                }.frame(maxWidth: .infinity).opacity(checkCanSave ? 1.0 : 0.2)
+                }.frame(maxWidth: .infinity)
                     .padding(Sizes.padding).foregroundColor( .colorText).background(Color.colorGreenPastel
-                    ).cornerRadius(Sizes.radius).disabled(!checkCanSave)
+                    ).cornerRadius(Sizes.radius).opacity(checkCanSave ? 1.0 : 0.5).disabled(!checkCanSave)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding(Sizes.paddingPage)

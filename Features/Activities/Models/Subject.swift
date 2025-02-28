@@ -18,6 +18,8 @@ struct ColorComponents: Codable {
             green: resolved.green,
             blue: resolved.blue
         )
+    
+        
     }
 }
 
@@ -26,6 +28,14 @@ class Subject {
     
     var title: String
     var colorComponent: ColorComponents
+    
+    static func getSubjectNames(subjects: [Subject]) -> [String] {
+        var subjectNames: [String] = []
+        for subject in subjects {
+            subjectNames.append(subject.title)
+        }
+        return subjectNames
+    }
     
     init(title: String,
          color: Color

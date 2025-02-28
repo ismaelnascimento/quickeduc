@@ -5,14 +5,9 @@ struct ActivitiesView: View {
     @Environment(\.modelContext) var modelContext
     
     let weekDays = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"]
+    let weekDaysComplete = ["segunda", "terça", "quarta", "quinta", "sexta", "sábado"]
     @State var weekDay: String = "Seg"
     
-//    var activities: [Activity] = [
-//        Activity(title: "Prova", createAt: Date.now, status: StatusActivity.todo, subject: Subject(title: "Matemática", color: Color.indigo),  type: TypeActivity.test, date: Date.now),
-//        Activity(title: "Evento",  createAt: Date.now, status: StatusActivity.done,subject: Subject(title: "Apple", color: Color.green), local: "Planalto Caucaia",  type: TypeActivity.event, date: Date.now),
-//        Activity(title: "Apresentação",  createAt: Date.now, status: StatusActivity.done, subject: Subject(title: "Geografia", color: Color.pink), type: TypeActivity.presentation, date: Date.now),
-//        Activity(title: "Tarefa",  createAt: Date.now, status: StatusActivity.doing,subject: Subject(title: "Português", color: Color.blue), type: TypeActivity.task, date: Date.now),
-//    ]
     
     @Query var activities: [Activity]
     
@@ -46,75 +41,102 @@ struct ActivitiesView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView(.vertical) {
-                VStack {
-                    VStack {
-                        // Button add activity
-                        Button {
-                            isShowingSheetActivity = true
-                        } label: {
+            let weekTodayIndex = Calendar.current.component(.weekday, from: Date.now)
+            let today = weekDays[weekTodayIndex - 2]
+            
+            List {
+                Section {
+                    Button {
+                        isShowingSheetActivity = true
+                    } label: {
+                        HStack(alignment: .center) {
+                            Text("Olá, o que vamos\nestudar hoje? ")
+                                .fontWeight(.semibold)
+                                .font(.system(size: 28))
+                                .foregroundColor(.colorText)
+                                .multilineTextAlignment(.leading)
+                                .frame(height: 68, alignment: .leading)
+                            Spacer()
                             HStack(alignment: .center) {
-                                Text("Olá, o que vamos\nestudar hoje? ")
-                                    .fontWeight(.semibold)
-                                    .font(.system(size: 28))
-                                    .foregroundColor(.colorText)
-                                    .multilineTextAlignment(.leading)
-                                    .frame(height: 68, alignment: .leading)
-                                Spacer()
-                                HStack(alignment: .center) {
-                                    Image(systemName: "plus").resizable().frame(width: 20, height: 20).foregroundColor(.colorCyan)
-                                }
-                                .padding(7)
-                                .frame(width: 58, height: 58, alignment: .center)
-                                .background(Color.colorGreenLight)
-                                .cornerRadius(100)
+                                Image(systemName: "plus").resizable().frame(width: 20, height: 20).foregroundColor(.colorCyan)
                             }
-                            .padding(Sizes.padding)
-                            .frame(height: 99, alignment: .bottom)
-                            .background(Color.colorGreenPastel)
-                            .cornerRadius(Sizes.radius)
+                            .padding(7)
+                            .frame(width: 58, height: 58, alignment: .center)
+                            .background(Color.colorGreenLight)
+                            .cornerRadius(100)
                         }
-                        
-                        
-                        // Filter day week
-                        Picker("Pick A Group", selection: $weekDay) {
-                            ForEach(weekDays, id: \.self) {
-                                Text($0)
-                            }
-                        }
-                        .pickerStyle(.palette)
-                        .padding(.top, 10)
-                        
-                        // Activities list
-                        
-                        VStack(alignment: .center) {
-                            if(filteredActivities.isEmpty) {
-                                Image("WithoutActivity")
-                                    .padding(.top, 80)
-                            } else {
-                                ForEach(filteredActivities) { activity in
-                                    ActivityView(activity)
-                                }
-                            }
-                        }
-                        
-                        .padding(.top, 10)
-                        
-                        Spacer()
-                    }.padding(Sizes.paddingPage)
+                        .padding(Sizes.padding)
+                        .frame(height: 99, alignment: .bottom)
+                        .background(Color.colorGreenPastel)
+                        .cornerRadius(Sizes.radius)
+                    }
+                    
+                    .padding(.top, 10)
                 }
-                .sheet(isPresented: $isShowingSheetActivity) {
-                    SaveActivityView(isShowingSheet: $isShowingSheetActivity, activity: nil)
-                        .presentationDetents([.height(700), .large])
+                .buttonStyle(.plain)
+                .listRowSeparator(.hidden)
+                
+                
+                Section {
+                    // Filter day week
+                    Picker("Pick A Group", selection: $weekDay) {
+                        ForEach(weekDays, id: \.self) {
+                            Text($0)
+                            
+                        }
+                    }
+                    .pickerStyle(.palette)
                 }
-                .navigationTitle("Esta Semana")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbarBackground(Color.colorBackground, for: .navigationBar, .tabBar)
-                .toolbarBackground(.visible, for: .navigationBar, .navigationBar)
-            }.onAppear() {
-                let weekTodayIndex = Calendar.current.component(.weekday, from: Date.now)
-                weekDay = weekDays[weekTodayIndex - 2]
+                .buttonStyle(.plain)
+                .listRowSeparator(.hidden)
+                
+                
+                // Activities list
+                
+                Section {
+                    if(filteredActivities.isEmpty) {
+                        Image("WithoutActivity")
+                            .padding(.top, 80)
+                            .listRowSeparator(.hidden)
+                            .buttonStyle(.plain)
+                    } else {
+                        ForEach(filteredActivities.indices, id: \.self) { index in
+                            ActivityView(filteredActivities[index])
+                                .listRowSeparator(.hidden)
+                                .buttonStyle(.plain)
+                                .listRowInsets(EdgeInsets(top: 5.0, leading: Sizes.padding, bottom: 5.0, trailing: Sizes.padding))
+                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                    Button(role: .destructive) {
+                                        modelContext.delete(filteredActivities[index])
+                                    } label: {
+                                        Label("", systemImage: "trash")
+                                    }
+                                }
+                                
+                            //                                .padding(.top, 10)
+                            
+                            
+                        }
+                    }
+                }
+                .frame(alignment: .center)
+                .padding(.top, 5)
+                
+                //Spacer()
+            }.onAppear {
+                weekDay = today
             }
+            .listStyle(.plain)
+            //.padding(Sizes.paddingPage)
+            
+            .sheet(isPresented: $isShowingSheetActivity) {
+                SaveActivityView(isShowingSheet: $isShowingSheetActivity, activity: nil)
+                    .presentationDetents([.height(700), .large])
+            }
+            .navigationTitle("Esta Semana")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(Color.colorBackground, for: .navigationBar, .tabBar)
+            .toolbarBackground(.visible, for: .navigationBar, .navigationBar)
         }
     }
 }

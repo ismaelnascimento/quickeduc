@@ -66,7 +66,7 @@ struct ActivityView: View {
                         ).resizable().scaledToFit().frame(width: 16, height: 16).foregroundColor(.colorTextGray)
                         
                         // pegando a informação correta para cada tipo \\
-                        var showNote = activity.note != nil ? activity.note != "" ? activity.note : "Sem anotações"  :  "Sem anotações"
+                        let showNote = activity.note != nil ? activity.note != "" ? activity.note : "Sem anotações"  :  "Sem anotações"
                         let info = switch activity.type {
                         case TypeActivity.event:
                             activity.local != nil ? activity.local != "" ? activity.local : "Não informado" : "Não informado"
@@ -110,6 +110,9 @@ struct ActivityView: View {
             
         }
         .contentShape(Rectangle())
+        .onLongPressGesture {
+            isShowingSheetActivity = true
+        }
         .onTapGesture {
             withAnimation {
                 isShowingSheetActivity = true
@@ -120,9 +123,10 @@ struct ActivityView: View {
                 .presentationDetents([.height(700), .large])
         }
         .padding(Sizes.padding)
-        .frame(width: 350, height: 100)
+        .frame(height: 100)
         .background(color.quinary)
         .cornerRadius(Sizes.radius)
+        
         
     }
 }

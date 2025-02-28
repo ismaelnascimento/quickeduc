@@ -25,6 +25,7 @@ struct ClassSubjectManagerButton: View {
                         .foregroundStyle(Color.colorGreen)
                 }
             }
+            .contentShape(Rectangle())
             .onTapGesture {
                 isShowingSheet = true
             }
